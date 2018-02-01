@@ -10628,8 +10628,8 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-var App = function (_Component) {
-    _inherits(App, _Component);
+var App = function (_React$Component) {
+    _inherits(App, _React$Component);
 
     function App(props) {
         _classCallCheck(this, App);
@@ -10643,16 +10643,18 @@ var App = function (_Component) {
             totalBet: 0,
             maxAmountOfBets: 0
         };
+
         if (typeof web3 != 'undefined') {
             console.log("Using web3 detected from external source like Metamask");
             _this.web3 = new _web2.default(web3.currentProvider);
         } else {
-            console.log("No web3 detected.Falling back to http://localhost:9545.You should remove this fallback when you deploy live, as it's inherently insecure.Consider switching to MetaMask for devlopment.More info here: http://truffleframework.com/tutorials/truffle-and-metamask");
-            _this.web3 = new _web2.default(new _web2.default.providers.HttpProvider("http://localhost:9545"));
+            console.log("No web3 detected. Falling back to http://localhost:8545. You should remove this fallback when you deploy live, as it's inherently insecure. Consider switching to Metamask for development. More info here: http://truffleframework.com/tutorials/truffle-and-metamask");
+            _this.web3 = new _web2.default(new _web2.default.providers.HttpProvider("http://localhost:8545"));
         }
         var MyContract = web3.eth.contract([{ "constant": false, "inputs": [{ "name": "number", "type": "uint256" }], "name": "bet", "outputs": [], "payable": true, "stateMutability": "payable", "type": "function" }, { "constant": false, "inputs": [{ "name": "player", "type": "address" }], "name": "checkPlayerExists", "outputs": [{ "name": "", "type": "bool" }], "payable": false, "stateMutability": "nonpayable", "type": "function" }, { "constant": false, "inputs": [{ "name": "numberWinner", "type": "uint256" }], "name": "distributePrizes", "outputs": [], "payable": false, "stateMutability": "nonpayable", "type": "function" }, { "constant": false, "inputs": [], "name": "generateNumberWinner", "outputs": [], "payable": false, "stateMutability": "nonpayable", "type": "function" }, { "constant": false, "inputs": [], "name": "kill", "outputs": [], "payable": false, "stateMutability": "nonpayable", "type": "function" }, { "constant": false, "inputs": [], "name": "resetData", "outputs": [], "payable": false, "stateMutability": "nonpayable", "type": "function" }, { "inputs": [{ "name": "_minimumBet", "type": "uint256" }], "payable": false, "stateMutability": "nonpayable", "type": "constructor" }, { "payable": true, "stateMutability": "payable", "type": "fallback" }]);
 
         _this.state.ContractInstance = MyContract.at("0x9f2c1cbf7a7976a88152239ceff9e060553c4cad");
+        window.a = _this.state;
         return _this;
     }
 
@@ -10660,8 +10662,9 @@ var App = function (_Component) {
         key: 'componentDidMount',
         value: function componentDidMount() {
             this.updateState();
-            this.setUpListeners();
-            setInterval(this.updateState.bind(this), 10e3);
+            this.setupListeners();
+
+            setInterval(this.updateState.bind(this), 7e3);
         }
     }, {
         key: 'updateState',
@@ -10697,7 +10700,8 @@ var App = function (_Component) {
                 }
             });
         }
-        // Listen for events and exeutes the voteNumber method
+
+        // Listen for events and executes the voteNumber method
 
     }, {
         key: 'setupListeners',
@@ -10709,6 +10713,7 @@ var App = function (_Component) {
                 number.addEventListener('click', function (event) {
                     event.target.className = 'number-selected';
                     _this3.voteNumber(parseInt(event.target.innerHTML), function (done) {
+
                         // Remove the other number selected
                         for (var i = 0; i < liNodes.length; i++) {
                             liNodes[i].className = '';
@@ -10721,7 +10726,9 @@ var App = function (_Component) {
         key: 'voteNumber',
         value: function voteNumber(number, cb) {
             var bet = this.refs['ether-bet'].value;
+
             if (!bet) bet = 0.1;
+
             if (parseFloat(bet) < this.state.minimumBet) {
                 alert('You must bet more than the minimum');
                 cb();
@@ -10738,8 +10745,6 @@ var App = function (_Component) {
     }, {
         key: 'render',
         value: function render() {
-            var _this4 = this;
-
             return _react2.default.createElement(
                 'div',
                 { className: 'main-container' },
@@ -10754,9 +10759,9 @@ var App = function (_Component) {
                     _react2.default.createElement(
                         'b',
                         null,
-                        'Number of Bets:'
+                        'Number of bets:'
                     ),
-                    ' &nsbp;',
+                    ' \xA0',
                     _react2.default.createElement(
                         'span',
                         null,
@@ -10769,9 +10774,9 @@ var App = function (_Component) {
                     _react2.default.createElement(
                         'b',
                         null,
-                        'Last number Winner:'
+                        'Last number winner:'
                     ),
-                    ' &nsbp;',
+                    ' \xA0',
                     _react2.default.createElement(
                         'span',
                         null,
@@ -10822,8 +10827,7 @@ var App = function (_Component) {
                     _react2.default.createElement(
                         'span',
                         null,
-                        this.state.maxAmountOfBets,
-                        ' ether'
+                        this.state.maxAmountOfBets
                     )
                 ),
                 _react2.default.createElement('hr', null),
@@ -10846,76 +10850,84 @@ var App = function (_Component) {
                 ),
                 _react2.default.createElement(
                     'ul',
-                    null,
+                    { ref: 'numbers' },
                     _react2.default.createElement(
                         'li',
-                        { onClick: function onClick() {
-                                _this4.voteNumber(1);
-                            } },
+                        null,
                         '1'
                     ),
                     _react2.default.createElement(
                         'li',
-                        { onClick: function onClick() {
-                                _this4.voteNumber(2);
-                            } },
+                        null,
                         '2'
                     ),
                     _react2.default.createElement(
                         'li',
-                        { onClick: function onClick() {
-                                _this4.voteNumber(3);
-                            } },
+                        null,
                         '3'
                     ),
                     _react2.default.createElement(
                         'li',
-                        { onClick: function onClick() {
-                                _this4.voteNumber(4);
-                            } },
+                        null,
                         '4'
                     ),
                     _react2.default.createElement(
                         'li',
-                        { onClick: function onClick() {
-                                _this4.voteNumber(5);
-                            } },
+                        null,
                         '5'
                     ),
                     _react2.default.createElement(
                         'li',
-                        { onClick: function onClick() {
-                                _this4.voteNumber(6);
-                            } },
+                        null,
                         '6'
                     ),
                     _react2.default.createElement(
                         'li',
-                        { onClick: function onClick() {
-                                _this4.voteNumber(7);
-                            } },
+                        null,
                         '7'
                     ),
                     _react2.default.createElement(
                         'li',
-                        { onClick: function onClick() {
-                                _this4.voteNumber(8);
-                            } },
+                        null,
                         '8'
                     ),
                     _react2.default.createElement(
                         'li',
-                        { onClick: function onClick() {
-                                _this4.voteNumber(9);
-                            } },
+                        null,
                         '9'
                     ),
                     _react2.default.createElement(
                         'li',
-                        { onClick: function onClick() {
-                                _this4.voteNumber(10);
-                            } },
+                        null,
                         '10'
+                    )
+                ),
+                _react2.default.createElement('hr', null),
+                _react2.default.createElement(
+                    'div',
+                    null,
+                    _react2.default.createElement(
+                        'i',
+                        null,
+                        'Only working with the Ropsten Test Network'
+                    )
+                ),
+                _react2.default.createElement(
+                    'div',
+                    null,
+                    _react2.default.createElement(
+                        'i',
+                        null,
+                        'You can only vote once per account'
+                    )
+                ),
+                _react2.default.createElement(
+                    'div',
+                    null,
+                    _react2.default.createElement(
+                        'i',
+                        null,
+                        'Your vote will be reflected when the next block is mined'
                     )
                 )
             );
@@ -10923,7 +10935,7 @@ var App = function (_Component) {
     }]);
 
     return App;
-}(_react.Component);
+}(_react2.default.Component);
 
 _reactDom2.default.render(_react2.default.createElement(App, null), document.querySelector('#root'));
 
