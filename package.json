@@ -1,0 +1,35 @@
+{
+  "name": "gambling-den",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ShubhamBansal1997/gambling-den.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ShubhamBansal1997/gambling-den/issues"
+  },
+  "homepage": "https://github.com/ShubhamBansal1997/gambling-den#readme",
+  "devDependencies": {
+    "babel-core": "^6.26.0",
+    "babel-loader": "^7.1.2",
+    "babel-preset-es2015": "^6.24.1",
+    "babel-preset-react": "^6.24.1",
+    "babel-preset-stage-2": "^6.24.1",
+    "css-loader": "^0.28.9",
+    "json-loader": "^0.5.7",
+    "react": "^16.2.0",
+    "react-dom": "^16.2.0",
+    "style-loader": "^0.20.1",
+    "truffle": "^4.0.6",
+    "web3": "^0.20.4",
+    "webpack": "^3.10.0"
+  }
+}
